@@ -8,16 +8,19 @@ import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import WorkIcon from '@mui/icons-material/WorkOutline';
+import ImportantIcon from '@mui/icons-material/WarningAmber';
+import EmailIcon from '@mui/icons-material/MailOutline';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tasks: [
-        {name: 'Task 1', done: false },
-        {name: 'Task 2', done: false },
-        {name: 'Task 3', done: false },
-        {name: 'Task 4', done: false }
+        {name: 'Task 1', done: false, category: 'work'},
+        {name: 'Task 2', done: false, category: 'email' },
+        {name: 'Task 3', done: false, category: 'important' },
+        {name: 'Task 4', done: false, category: 'work' }
       ],
       search: '',
       showModal: false,
@@ -90,12 +93,15 @@ class App extends React.Component {
       });
   }
 
-    handleAddUpdateTask = (title) => {
+    handleAddUpdateTask = (title, category) => {
         if (this.state.currentTask) {
+            if(title.trim() === '') {
+                return;
+            }
             this.setState(prevState => {
                 const tasks = prevState.tasks.map((item, index) => {
                     if (index === prevState.currentTask.index) {
-                        return {name: title, done: item.done};
+                        return {name: title, done: item.done, category: category};
                     } else {
                         return item;
                     }
@@ -103,8 +109,11 @@ class App extends React.Component {
                 return {tasks, currentTask: null};
             });
         } else {
+            if(title.trim() === '') {
+                return;
+            }
             this.setState(prevState => {
-                const tasks = [...prevState.tasks, {name: title, done: false}];
+                const tasks = [...prevState.tasks, {name: title, done: false, category: category}];
                 return {tasks};
             });
         }
@@ -139,6 +148,7 @@ class App extends React.Component {
                     handleClose={() => this.setState({showModal: false, currentTask: null})}
                     name={this.state.currentTask ? this.state.currentTask.name : ''}
                     handleAddUpdateTask={this.handleAddUpdateTask}
+                    category={this.state.currentTask ? this.state.currentTask.category : ''}
                 />
                 <div>Tasks</div>
                 <ul>
@@ -146,6 +156,11 @@ class App extends React.Component {
                         .filter(task => this.state.search.length < 3 || task.name.includes(this.state.search))
                         .map((task, index) => (
                             <li key={index} className={task.done ? 'done' : ''}>
+                                {
+                                    task.category === 'work' && <WorkIcon /> ||
+                                    task.category === 'important' && <ImportantIcon /> ||
+                                    task.category === 'email' && <EmailIcon />
+                                }
                                 <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
                                 {task.name}
                                 <ArrowUpwardIcon onClick={() => this.moveTaskUp(index)} />

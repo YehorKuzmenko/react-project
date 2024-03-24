@@ -3,13 +3,15 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-function ModalComponent({show, handleClose, name, handleAddUpdateTask}) {
+function ModalComponent({show, handleClose, name, handleAddUpdateTask, prevCategory}) {
 
     const [title, setTitle] = useState(name);
+    const [category, setCategory] = useState(prevCategory);
 
     const handleTaskEvent = () => {
-        handleAddUpdateTask(title);
+        handleAddUpdateTask(title, category);
         setTitle('');
+        setCategory('');
         handleClose();
     }
 
@@ -41,6 +43,15 @@ function ModalComponent({show, handleClose, name, handleAddUpdateTask}) {
                         value={title}
                         onChange={event => setTitle(event.target.value)}
                     />
+                    <select
+                        value={category}
+                        onChange={event => setCategory(event.target.value)}
+                    >
+                        <option value="" disabled={true}>Select category</option>
+                        <option value="work">Work</option>
+                        <option value="email">Email</option>
+                        <option value="important">Important</option>
+                    </select>
                     <button onClick={handleTaskEvent}>{name === '' ? 'Add' : 'Update'}</button>
                 </Typography>
             </Box>
