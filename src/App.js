@@ -74,13 +74,22 @@ class App extends React.Component {
         }
     }
 
+    deleteTask = (index) => {
+        if (window.confirm('Are you sure you want to delete this task?')) {
+            this.setState(prevState => {
+                const tasks = prevState.tasks.filter((item, idx) => idx !== index);
+                return {tasks};
+            });
+        }
+    }
+
   render() {
       return (
           <div className="App">
               <Header tasks={this.countTasks()}/>
               <ModalComponent
                 show={this.state.showModal}
-                handleClose={() => this.setState({showModal: false})}
+                handleClose={() => this.setState({showModal: false, currentTask: null})}
                 name={this.state.currentTask ? this.state.currentTask.name : ''}
                 handleAddUpdateTask={this.handleAddUpdateTask}
               />
@@ -93,6 +102,7 @@ class App extends React.Component {
                               <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
                               {task.name}
                                 <button onClick={() => this.setState({showModal: true, currentTask: {name: task.name, index}})}>Edit</button>
+                                <button onClick={() => this.deleteTask(index)}>Delete</button>
                           </li>
                       ))}
               </ul>

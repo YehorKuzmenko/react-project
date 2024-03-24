@@ -31,7 +31,8 @@ function ModalComponent({show, handleClose, name, handleAddUpdateTask}) {
                 boxShadow: 24,
                 p: 4}}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Task
+                    {name === '' ? 'Add Task' : name}
+
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <input
