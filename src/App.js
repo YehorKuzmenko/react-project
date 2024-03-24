@@ -17,10 +17,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       tasks: [
-        {name: 'Task 1', done: false, category: 'work', date: '2021-10-10'},
-        {name: 'Task 2', done: false, category: 'email', date: '2021-10-10'},
-        {name: 'Task 3', done: false, category: 'important',date: '2021-10-10' },
-        {name: 'Task 4', done: false, category: 'work', date: '2021-10-10' }
       ],
       search: '',
       showModal: false,
