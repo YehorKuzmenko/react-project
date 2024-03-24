@@ -17,10 +17,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       tasks: [
-        {name: 'Task 1', done: false, category: 'work'},
-        {name: 'Task 2', done: false, category: 'email' },
-        {name: 'Task 3', done: false, category: 'important' },
-        {name: 'Task 4', done: false, category: 'work' }
+        {name: 'Task 1', done: false, category: 'work', date: '2021-10-10'},
+        {name: 'Task 2', done: false, category: 'email', date: '2021-10-10'},
+        {name: 'Task 3', done: false, category: 'important',date: '2021-10-10' },
+        {name: 'Task 4', done: false, category: 'work', date: '2021-10-10' }
       ],
       search: '',
       showModal: false,
@@ -93,7 +93,7 @@ class App extends React.Component {
       });
   }
 
-    handleAddUpdateTask = (title, category) => {
+    handleAddUpdateTask = (title, category, date) => {
         if (this.state.currentTask) {
             if(title.trim() === '') {
                 return;
@@ -101,7 +101,7 @@ class App extends React.Component {
             this.setState(prevState => {
                 const tasks = prevState.tasks.map((item, index) => {
                     if (index === prevState.currentTask.index) {
-                        return {name: title, done: item.done, category: category};
+                        return {name: title, done: item.done, category: category, date: date};
                     } else {
                         return item;
                     }
@@ -113,7 +113,7 @@ class App extends React.Component {
                 return;
             }
             this.setState(prevState => {
-                const tasks = [...prevState.tasks, {name: title, done: false, category: category}];
+                const tasks = [...prevState.tasks, {name: title, done: false, category: category, date: date}];
                 return {tasks};
             });
         }
@@ -163,6 +163,8 @@ class App extends React.Component {
                                 }
                                 <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
                                 {task.name}
+                                {task.date && <p> {new Date(task.date).toLocaleDateString('en-GB')}</p>}
+                                {new Date() > new Date(task.date) && <p>It is too late ;(</p>}
                                 <ArrowUpwardIcon onClick={() => this.moveTaskUp(index)} />
                                 <ArrowDownwardIcon onClick={() => this.moveTaskDown(index)} />
                                 <EditIcon onClick={() => this.setState({showModal: true, currentTask: {name: task.name, index}})}>Edit</EditIcon>
