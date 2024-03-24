@@ -1,8 +1,8 @@
-function Footer({handleSearchInput}) {
+function Footer({handleSearchInput, showAddTask}) {
   return (
     <footer>
       <input type="text" placeholder="Search" onChange={event => handleSearchInput(event.target.value)}></input>
-      <button>Add Task</button>
+      <button onClick={showAddTask}>Add Task</button>
     </footer>
   );
 }

@@ -2,6 +2,8 @@ import './App.css';
 import React from 'react';
 import Header from './Header';
 import Footer from "./Footer";
+import Modal from './Modal';
+import ModalComponent from "./Modal";
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +15,9 @@ class App extends React.Component {
         {name: 'Task 3', done: false },
         {name: 'Task 4', done: false }
       ],
-      search: ''
+      search: '',
+      showModal: false,
+      currentTask: null
     };
   }
 
@@ -50,10 +54,36 @@ class App extends React.Component {
       });
   }
 
+    handleAddUpdateTask = (title) => {
+        if (this.state.currentTask) {
+            this.setState(prevState => {
+                const tasks = prevState.tasks.map((item, index) => {
+                    if (index === prevState.currentTask.index) {
+                        return {name: title, done: item.done};
+                    } else {
+                        return item;
+                    }
+                });
+                return {tasks, currentTask: null};
+            });
+        } else {
+            this.setState(prevState => {
+                const tasks = [...prevState.tasks, {name: title, done: false}];
+                return {tasks};
+            });
+        }
+    }
+
   render() {
       return (
           <div className="App">
               <Header tasks={this.countTasks()}/>
+              <ModalComponent
+                show={this.state.showModal}
+                handleClose={() => this.setState({showModal: false})}
+                name={this.state.currentTask ? this.state.currentTask.name : ''}
+                handleAddUpdateTask={this.handleAddUpdateTask}
+              />
               <div>Tasks</div>
               <ul>
                   {this.state.tasks
@@ -62,10 +92,14 @@ class App extends React.Component {
                           <li key={index} className={task.done ? 'done' : ''}>
                               <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
                               {task.name}
+                                <button onClick={() => this.setState({showModal: true, currentTask: {name: task.name, index}})}>Edit</button>
                           </li>
                       ))}
               </ul>
-              <Footer handleSearchInput={this.handleSearchInput}/>
+              <Footer
+                  showAddTask={() => this.setState({showModal: true})}
+                  handleSearchInput={this.handleSearchInput}
+              />
           </div>
       );
   }
