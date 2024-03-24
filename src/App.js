@@ -24,6 +24,12 @@ class App extends React.Component {
       currentTask: null
     };
   }
+    componentDidMount() {
+        const userConfirmation = window.confirm("Do you want to load the tasks from localStorage?");
+        if (userConfirmation) {
+            this.loadTasks();
+        }
+    }
 
   countTasks() {
 
