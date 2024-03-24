@@ -29,11 +29,12 @@ function ModalComponent({show, handleClose, name, handleAddUpdateTask, prevCateg
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: 400,
+                width: { xs: '90%', sm: '75%', md: '50%', lg: '400px' },
                 bgcolor: 'background.paper',
                 border: '2px solid #000',
                 boxShadow: 24,
-                p: 4}}>
+                p: 4,
+            }}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     {name === '' ? 'Add Task' : name}
 

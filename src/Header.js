@@ -1,10 +1,8 @@
-function Header({tasks}) {
+function Header({tasks, opacity}) {
     return (
-        <div className="Header">
-                <header>
-                    {tasks}
-                </header>
-        </div>
+        <header style={{opacity : opacity}}>
+            {tasks}
+        </header>
     );
 }
 

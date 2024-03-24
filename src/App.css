@@ -1,3 +1,72 @@
-.done{
+.App {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+  gap: 10px;
+}
+
+li:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: scale(1.02);
+}
+
+li.done {
   text-decoration: line-through;
+  background-color: #e6ffe6;
+}
+
+button {
+  margin: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+/* Media query for mobile devices */
+@media (max-width: 600px) {
+  ul {
+    max-width: 100%;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    margin: 5px 0;
+  }
 }

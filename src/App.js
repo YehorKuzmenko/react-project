@@ -24,7 +24,8 @@ class App extends React.Component {
       ],
       search: '',
       showModal: false,
-      currentTask: null
+      currentTask: null,
+      headerOpacity: 1
     };
   }
     componentDidMount() {
@@ -35,9 +36,9 @@ class App extends React.Component {
     }
 
   countTasks() {
-
-      let total = this.state.tasks.length;
-      let done = this.state.tasks.filter(task => task.done).length;
+      const tasks = this.filterTasks(this.state.search);
+      let total = tasks.length;
+      let done = tasks.filter(task => task.done).length;
       let toDo = total - done;
 
       return (
@@ -48,6 +49,10 @@ class App extends React.Component {
           </div>
       );
   }
+
+    filterTasks = (search) => {
+        return this.state.tasks.filter(task => search.length < 3 || task.name.includes(search));
+    }
 
     moveTaskUp = (index) => {
         this.setState(prevState => {
@@ -77,6 +82,11 @@ class App extends React.Component {
 
   handleSearchInput = (value) => {
       this.setState({search: value});
+      if (value.trim().length >= 3 || value.trim().length === 0) {
+          this.setState({ headerOpacity: 1 });
+      } else if (value.trim().length < 3 && value.trim().length > 0) {
+          this.setState({ headerOpacity: 0.5 });
+      }
 
   }
 
@@ -142,7 +152,10 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <Header tasks={this.countTasks()}/>
+                <Header
+                    tasks={this.countTasks()}
+                    opacity={this.state.headerOpacity}
+                />
                 <ModalComponent
                     show={this.state.showModal}
                     handleClose={() => this.setState({showModal: false, currentTask: null})}
@@ -150,27 +163,26 @@ class App extends React.Component {
                     handleAddUpdateTask={this.handleAddUpdateTask}
                     category={this.state.currentTask ? this.state.currentTask.category : ''}
                 />
-                <div>Tasks</div>
+                <h1>Tasks</h1>
                 <ul>
-                    {this.state.tasks
-                        .filter(task => this.state.search.length < 3 || task.name.includes(this.state.search))
-                        .map((task, index) => (
-                            <li key={index} className={task.done ? 'done' : ''}>
-                                {
-                                    task.category === 'work' && <WorkIcon /> ||
-                                    task.category === 'important' && <ImportantIcon /> ||
-                                    task.category === 'email' && <EmailIcon />
-                                }
-                                <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
-                                {task.name}
-                                {task.date && <p> {new Date(task.date).toLocaleDateString('en-GB')}</p>}
-                                {new Date() > new Date(task.date) && <p>It is too late ;(</p>}
-                                <ArrowUpwardIcon onClick={() => this.moveTaskUp(index)} />
-                                <ArrowDownwardIcon onClick={() => this.moveTaskDown(index)} />
-                                <EditIcon onClick={() => this.setState({showModal: true, currentTask: {name: task.name, index}})}>Edit</EditIcon>
-                                <DeleteIcon onClick={() => this.deleteTask(index)} />
-                            </li>
-                        ))}
+                    {this.filterTasks(this.state.search).map((task, index) => (
+                        <li key={index} className={task.done ? 'done' : ''}>
+                            {
+                                task.category === 'work' && <WorkIcon /> ||
+                                task.category === 'important' && <ImportantIcon /> ||
+                                task.category === 'email' && <EmailIcon />
+                            }
+                            <input type="checkbox" checked={task.done} onChange={() => this.toggleTasksDone(index)}></input>
+                            {task.name}
+                            {task.date && <p>({new Date(task.date).toLocaleDateString('en-GB')})</p>}
+
+                            <ArrowUpwardIcon onClick={() => this.moveTaskUp(index)} />
+                            <ArrowDownwardIcon onClick={() => this.moveTaskDown(index)} />
+                            <EditIcon onClick={() => this.setState({showModal: true, currentTask: {name: task.name, index}})}>Edit</EditIcon>
+                            <DeleteIcon onClick={() => this.deleteTask(index)} />
+                            {new Date() > new Date(task.date) && <p>It is too late ;(</p>}
+                        </li>
+                    ))}
                 </ul>
                 <Footer
                     loadTasks={this.loadTasks}
